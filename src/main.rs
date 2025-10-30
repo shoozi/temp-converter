@@ -15,6 +15,10 @@ fn main() {
             .read_line(&mut choice)
             .expect("Failed to read line");
 
-        println!("User chose: {choice}");
+        if choice == 1 {
+            // celsius -> Fahrenheit
+        } else if {
+            
+        }
     }
 }
