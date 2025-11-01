@@ -1,5 +1,11 @@
 use std::io;
 
+enum Conversion {
+    FahrenheitToCelsius,
+    CelsiusToFahrenheit,
+    Exit,
+}
+
 fn main() {
     println!("Temperature converter\n");
 
@@ -9,43 +15,46 @@ fn main() {
         println!("2. Celsius -> Fahrenheit");
         println!("3. Exit");
 
-        let mut choice = String::new();
+        let choice = read_input("Enter your choice:");
 
-        io::stdin()
-            .read_line(&mut choice)
-            .expect("Failed to read line");
-
-        let choice: u32 = match choice.trim().parse() {
-            Ok(num) => num,
-            Err(_) => {
-                println!("Please enter a valid number.");
+        match parse_choice(&choice.to_string()) {
+            Some(Conversion::FahrenheitToCelsius) => fahrenheit_to_celsius(),
+            Some(Conversion::CelsiusToFahrenheit) => celsius_to_fahrenheit(),
+            Some(Conversion::Exit) => {
+                println!("Exiting the program. Goodbye!");
+                break;
+            }
+            None => {
+                println!("Please enter a valid option (1, 2, or 3).");
                 continue;
             }
-        };
-
-        if choice == 1 {
-            fahrenheit_to_celsius();
-        } else if choice == 2 {
-            celsius_to_fahrenheit();
-        } else if choice == 3 {
-            println!("Exiting the program");
-            break;
-        } else {
-            println!("Invalid choice. Please select 1, 2, or 3.");
         }
     }
 }
 
-fn fahrenheit_to_celsius() {
-    let mut fahrenheit = String::new();
+fn read_input(prompt: &str) -> String {
+    println!("{}", prompt);
 
-    println!("Enter temperature in Fahrenheit:");
-
+    let mut input = String::new();
     io::stdin()
-        .read_line(&mut fahrenheit)
+        .read_line(&mut input)
         .expect("Failed to read line");
 
-    let fahrenheit: f64 = match fahrenheit.trim().parse() {
+    input.trim().to_string()
+}
+
+fn parse_choice(input: &str) -> Option<Conversion> {
+    match input.trim() {
+        "1" => Some(Conversion::FahrenheitToCelsius),
+        "2" => Some(Conversion::CelsiusToFahrenheit),
+        "3" => Some(Conversion::Exit),
+        _ => None,
+    }
+}
+
+fn fahrenheit_to_celsius() {
+    let input = read_input("Enter temperature in Fahrenheit:");
+    let fahrenheit: f64 = match input.parse() {
         Ok(num) => num,
         Err(_) => {
             println!("Please enter a valid number.");
@@ -59,15 +68,8 @@ fn fahrenheit_to_celsius() {
 }
 
 fn celsius_to_fahrenheit() {
-    println!("Enter temperature in Celsius:");
-
-    let mut celsius = String::new();
-
-    io::stdin()
-        .read_line(&mut celsius)
-        .expect("Failed to read line");
-
-    let celsius: f64 = match celsius.trim().parse() {
+    let input = read_input("Enter temperature in Celsius:");
+    let celsius: f64 = match input.parse() {
         Ok(num) => num,
         Err(_) => {
             println!("Please enter a valid number.");
@@ -77,5 +79,5 @@ fn celsius_to_fahrenheit() {
 
     let fahrenheit = (celsius * 9.0 / 5.0) + 32.0;
 
-    println!("{:.2}°C is {:.2}°F\n", celsius, fahrenheit)
+    println!("{:.2}°C is {:.2}°F\n", celsius, fahrenheit);
 }
