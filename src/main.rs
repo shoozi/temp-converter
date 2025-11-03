@@ -1,5 +1,6 @@
 use std::io;
 
+// enumerator to represent conversion types and give user the option to exit the program
 enum Conversion {
     FahrenheitToCelsius,
     CelsiusToFahrenheit,
@@ -32,6 +33,7 @@ fn main() {
     }
 }
 
+// function to grab user input to keep main and other functions as clean as possible
 fn read_input(prompt: &str) -> String {
     println!("{}", prompt);
 
@@ -43,6 +45,7 @@ fn read_input(prompt: &str) -> String {
     input.trim().to_string()
 }
 
+// parser to convert user input into the appropriate enum variant
 fn parse_choice(input: &str) -> Option<Conversion> {
     match input.trim() {
         "1" => Some(Conversion::FahrenheitToCelsius),
@@ -52,6 +55,7 @@ fn parse_choice(input: &str) -> Option<Conversion> {
     }
 }
 
+// function to convert Fahrenheit to Celsius
 fn fahrenheit_to_celsius() {
     let input = read_input("Enter temperature in Fahrenheit:");
     let fahrenheit: f64 = match input.parse() {
@@ -67,6 +71,7 @@ fn fahrenheit_to_celsius() {
     println!("{:.2}°F is {:.2}°C\n", fahrenheit, celsius);
 }
 
+// function to convert Celsius to Fahrenheit
 fn celsius_to_fahrenheit() {
     let input = read_input("Enter temperature in Celsius:");
     let celsius: f64 = match input.parse() {
@@ -80,4 +85,24 @@ fn celsius_to_fahrenheit() {
     let fahrenheit = (celsius * 9.0 / 5.0) + 32.0;
 
     println!("{:.2}°C is {:.2}°F\n", celsius, fahrenheit);
+}
+
+// test modules
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_fahrenheit_to_celsius() {
+        let fahrenheit = 100.0;
+        let celsius = (fahrenheit - 32.0) * 5.0 / 9.0;
+        assert_eq!(celsius, 37.77777777777778);
+    }
+
+    #[test]
+    fn test_celsius_to_fahrenheit() {
+        let celsius = 0.0;
+        let fahrenheit = (celsius * 9.0 / 5.0) + 32.0;
+        assert_eq!(fahrenheit, 32.0);
+    }
 }
