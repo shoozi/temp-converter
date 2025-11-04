@@ -90,7 +90,7 @@ fn celsius_to_fahrenheit() {
 // test modules
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn test_fahrenheit_to_celsius() {
